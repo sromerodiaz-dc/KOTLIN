@@ -13,13 +13,12 @@ class MyViewModel(): ViewModel() {
     // este va a ser nuestra lista para la secuencia random
     // usamos mutable, ya que la queremos modificar
     private var _numbers = mutableIntStateOf(0)
-
-    val numerosMutables: MutableList<Int> = MutableList(4){0}
-
+    var numerosMezclados = mutableListOf(0)
 
     // inicializamos variables cuando instanciamos
     init {
         Log.d(TAG_LOG, "Inicializamos ViewModel")
+
     }
 
     /**
@@ -27,25 +26,21 @@ class MyViewModel(): ViewModel() {
      */
     fun crearRandom() {
         _numbers.intValue = (0..3).random()
-        for (n in 0 until 4) {
-            numerosMutables[n] = (0..3).random()
-        }
         Log.d(TAG_LOG, "creamos random ${_numbers.intValue}")
-        Log.d(TAG_LOG,"Correspondencia: $numerosMutables")
         actualizarNumero(_numbers.intValue)
-    }
 
-    // Estado para controlar el resultado del juego
-    var hasWon = mutableStateOf(false)
+        numerosMezclados = (0..3).toList().shuffled().toMutableList()
+        Log.d(TAG_LOG, "$numerosMezclados")
+    }
 
     fun compararRandom(n: Int) {
         Log.d(TAG_LOG, "comparamos numeros")
-        if (Datos.numero != numerosMutables[n]) {
+        if (Datos.numero != numerosMezclados[n]) {
             Log.d(TAG_LOG, "numero desigual, reset")
             crearRandom()
         } else {
             Log.d(TAG_LOG, "numero igual")
-            hasWon.value = true // Cambiar el estado a 'ganado'
+            Datos.hasWon.value = !Datos.hasWon.value // Cambiar el estado a 'ganado'
         }
     }
 

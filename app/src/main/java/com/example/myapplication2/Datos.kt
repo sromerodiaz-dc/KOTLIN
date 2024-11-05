@@ -1,5 +1,6 @@
 package com.example.myapplication2
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 
 /**
@@ -7,6 +8,7 @@ import androidx.compose.ui.graphics.Color
  */
 object Datos {
     var numero = 0
+    var hasWon = mutableStateOf(false)
 }
 
 /**

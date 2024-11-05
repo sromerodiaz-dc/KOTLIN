@@ -176,25 +176,34 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
 @Composable
 fun GameScreen(viewModel: MyViewModel) {
     // Observa el estado hasWon
-    val hasWon = viewModel.hasWon.value
+    val hasWon = Datos.hasWon
+    val TAG_LOG = "miDebug"
 
     // Usar un Box para centrar el contenido
     Box(
         modifier = Modifier.fillMaxSize(), // Ocupa todo el tamaño de la pantalla
         contentAlignment = Alignment.Center // Centra el contenido en el Box
     ) {
-        if (hasWon) {
-            // Mostrar mensaje de victoria
-            Text(text = "¡Has ganado!", fontSize = 24.sp)
-        } else {
-            // Aquí puedes mostrar la UI normal del juego
-            // Ejemplo: Botones, números, etc.
-            Text(text = "Sigue jugando", fontSize = 24.sp, modifier = Modifier
-                .size(80.dp, 40.dp)
-                .offset(y = 150.dp)
-            )
-
+        if (!hasWon.value) {
             IU(miViewModel = viewModel)
+            Log.d(TAG_LOG, "empezando...")
+        } else {
+            Text(text = "¡Has ganado!", fontSize = 24.sp)
+            // Offset the button 150 pixels down
+            Button(
+                // utilizamos el color del enum
+                colors = ButtonDefaults.buttonColors(Color.Green),
+                onClick = {
+                    Log.d(TAG_LOG, "Dentro del onClick $hasWon")
+                    hasWon.value = !hasWon.value
+                },
+                modifier = Modifier
+                    .size(80.dp, 40.dp)
+                    .offset(y = 150.dp) // Move the button 150 pixels down
+            ) {
+                // utilizamos el texto del enum
+                Text("Volver a empezar", fontSize = 10.sp)
+            }
         }
     }
 }
