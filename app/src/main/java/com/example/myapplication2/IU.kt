@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,19 +74,20 @@ fun Boton(miViewModel: MyViewModel, enum_color: Colores) {
 
 @Composable
 fun FourColoredQuadrants(miViewModel: MyViewModel) {
-    val TAG_LOG = "miDebug2"
+    val TAG_LOG = "miDebug2" // Etiqueta para el log de depuración
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), // El Box ocupa todo el tamaño disponible
+        contentAlignment = Alignment.Center // Centra el contenido dentro del Box
     ) {
-        if (Datos.haStarted.value) {
-            // Using a Box to layer clickable areas over the arcs
+        if (Datos.haStarted.value) { // Verifica si el juego ha comenzado
+            // Usamos un Box para superponer áreas clicables sobre los arcos
             Box(modifier = Modifier.size(200.dp)) {
-                // Draw each quadrant with a different color
+                // Dibujamos cada cuadrante con un color diferente
                 Canvas(modifier = Modifier.fillMaxSize()) {
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
+                    val canvasWidth = size.width // Ancho del canvas
+                    val canvasHeight = size.height // Alto del canvas
 
+                    // Dibuja el cuadrante rojo
                     drawArc(
                         color = Color.Red,
                         startAngle = 0f,
@@ -96,6 +96,7 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante verde
                     drawArc(
                         color = Color.Green,
                         startAngle = 90f,
@@ -104,6 +105,7 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante azul
                     drawArc(
                         color = Color.Blue,
                         startAngle = 180f,
@@ -112,6 +114,7 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante amarillo
                     drawArc(
                         color = Color.Yellow,
                         startAngle = 270f,
@@ -122,92 +125,96 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
                     )
                 }
 
-                // Define clickable areas for each quadrant
-                val quadrantSize = 200.dp / 2
+                // Definimos áreas clicables para cada cuadrante
+                val quadrantSize = 200.dp / 2 // Tamaño de cada cuadrante
 
-                // rojo
+                // Cuadrante rojo
                 Box(
                     modifier = Modifier
                         .size(quadrantSize)
-                        .align(Alignment.TopStart)
+                        .align(Alignment.TopStart) // Alinea en la parte superior izquierda
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                Log.d(TAG_LOG, "Dentro del onClick")
-                                miViewModel.compararRandom(0)
+                                Log.d(TAG_LOG, "Dentro del onClick") // Log de clic
+                                miViewModel.compararRandom(0) // Llama a la función para comparar con el cuadrante rojo
                             })
                         }
                 )
 
-                // verde
+                // Cuadrante verde
                 Box(
                     modifier = Modifier
                         .size(quadrantSize)
-                        .align(Alignment.TopEnd)
+                        .align(Alignment.TopEnd) // Alinea en la parte superior derecha
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                miViewModel.compararRandom(1)
+                                miViewModel.compararRandom(1) // Llama a la función para comparar con el cuadrante verde
                             })
                         }
                 )
 
-                // azul
+                // Cuadrante azul
                 Box(
                     modifier = Modifier
                         .size(quadrantSize)
-                        .align(Alignment.BottomStart)
+                        .align(Alignment.BottomStart) // Alinea en la parte inferior izquierda
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                miViewModel.compararRandom(2)
+                                miViewModel.compararRandom(2) // Llama a la función para comparar con el cuadrante azul
                             })
                         }
                 )
 
-                // amarillo
+                // Cuadrante amarillo
                 Box(
                     modifier = Modifier
                         .size(quadrantSize)
-                        .align(Alignment.BottomEnd)
+                        .align(Alignment.BottomEnd) // Alinea en la parte inferior derecha
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                miViewModel.compararRandom(3)
+                                miViewModel.compararRandom(3) // Llama a la función para comparar con el cuadrante amarillo
                             })
                         }
                 )
             }
         } else {
-            // Using a Box to layer clickable areas over the arcs
+            // Si el juego no ha comenzado, dibujamos los cuadrantes con opacidad reducida
             Box(modifier = Modifier.size(200.dp)) {
-                // Draw each quadrant with a different color
+                // Dibujamos cada cuadrante con un color diferente y opacidad
                 Canvas(modifier = Modifier.fillMaxSize()) {
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
+                    val canvasWidth = size.width // Ancho del canvas
+                    val canvasHeight = size.height // Alto del canvas
 
+                    // Dibuja el cuadrante rojo con opacidad
                     drawArc(
-                        color = Color.Red.copy(alpha = 0.3f),  // Red with reduced opacity to make it paler
+                        color = Color.Red.copy(alpha = 0.3f),  // Rojo con opacidad reducida
                         startAngle = 0f,
                         sweepAngle = 90f,
                         useCenter = true,
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante verde con opacidad
                     drawArc(
-                        color = Color.Green.copy(alpha = 0.3f),  // Green with reduced opacity to make it paler
+                        color = Color.Green.copy(alpha =  0.3f),  // Verde con opacidad reducida
                         startAngle = 90f,
                         sweepAngle = 90f,
                         useCenter = true,
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante azul con opacidad
                     drawArc(
-                        color = Color.Blue.copy(alpha = 0.3f),  // Blue with reduced opacity to make it paler
+                        color = Color.Blue.copy(alpha = 0.3f),  // Azul con opacidad reducida
                         startAngle = 180f,
                         sweepAngle = 90f,
                         useCenter = true,
                         size = Size(canvasWidth, canvasHeight),
                         style = Fill
                     )
+                    // Dibuja el cuadrante amarillo con opacidad
                     drawArc(
-                        color = Color.Yellow.copy(alpha = 0.3f),  // Yellow with reduced opacity to make it paler
+                        color = Color.Yellow.copy(alpha = 0.3f),  // Amarillo con opacidad reducida
                         startAngle = 270f,
                         sweepAngle = 90f,
                         useCenter = true,
