@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 object Datos {
     var numero = 0
     var hasWon = mutableStateOf(false)
+    var haStarted = mutableStateOf(false)
 }
 
 /**

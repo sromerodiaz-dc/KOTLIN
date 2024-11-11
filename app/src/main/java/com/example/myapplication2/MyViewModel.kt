@@ -18,7 +18,14 @@ class MyViewModel(): ViewModel() {
     // inicializamos variables cuando instanciamos
     init {
         Log.d(TAG_LOG, "Inicializamos ViewModel")
+    }
 
+    fun onStart() {
+        Datos.haStarted.value = true
+    }
+
+    private fun onMatch() {
+        Datos.haStarted.value = false
     }
 
     /**
@@ -36,11 +43,11 @@ class MyViewModel(): ViewModel() {
     fun compararRandom(n: Int) {
         Log.d(TAG_LOG, "comparamos numeros")
         if (Datos.numero != numerosMezclados[n]) {
-            Log.d(TAG_LOG, "numero desigual, reset")
-            crearRandom()
+            Log.d(TAG_LOG, "numero desigual")
         } else {
             Log.d(TAG_LOG, "numero igual")
             Datos.hasWon.value = !Datos.hasWon.value // Cambiar el estado a 'ganado'
+            onMatch()
         }
     }
 

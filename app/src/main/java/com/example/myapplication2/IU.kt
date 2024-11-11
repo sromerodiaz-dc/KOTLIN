@@ -46,25 +46,28 @@ fun Boton(miViewModel: MyViewModel, enum_color: Colores) {
     // para que sea mas facil la etiqueta del log
     val TAG_LOG = "miDebug"
 
-    // Box to center the button
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter // Align items to the top center
-    ) {
-        // Offset the button 150 pixels down
-        Button(
-            // utilizamos el color del enum
-            colors = ButtonDefaults.buttonColors(enum_color.color),
-            onClick = {
-                Log.d(TAG_LOG, "Dentro del onClick")
-                miViewModel.crearRandom()
-            },
-            modifier = Modifier
-                .size(80.dp, 40.dp)
-                .offset(y = 150.dp) // Move the button 150 pixels down
+    if (!Datos.haStarted.value) {
+        // Box to center the button
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter // Align items to the top center
         ) {
-            // utilizamos el texto del enum
-            Text("START", fontSize = 10.sp)
+            // Offset the button 150 pixels down
+            Button(
+                // utilizamos el color del enum
+                colors = ButtonDefaults.buttonColors(enum_color.color),
+                onClick = {
+                    Log.d(TAG_LOG, "Dentro del onClick")
+                    miViewModel.onStart()
+                    miViewModel.crearRandom()
+                },
+                modifier = Modifier
+                    .size(80.dp, 40.dp)
+                    .offset(y = 150.dp) // Move the button 150 pixels down
+            ) {
+                // utilizamos el texto del enum
+                Text("START", fontSize = 10.sp)
+            }
         }
     }
 }
@@ -77,98 +80,142 @@ fun FourColoredQuadrants(miViewModel: MyViewModel) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // Using a Box to layer clickable areas over the arcs
-        Box(modifier = Modifier.size(200.dp)) {
-            // Draw each quadrant with a different color
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val canvasWidth = size.width
-                val canvasHeight = size.height
+        if (Datos.haStarted.value) {
+            // Using a Box to layer clickable areas over the arcs
+            Box(modifier = Modifier.size(200.dp)) {
+                // Draw each quadrant with a different color
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
 
-                drawArc(
-                    color = Color.Red,
-                    startAngle = 0f,
-                    sweepAngle = 90f,
-                    useCenter = true,
-                    size = Size(canvasWidth, canvasHeight),
-                    style = Fill
+                    drawArc(
+                        color = Color.Red,
+                        startAngle = 0f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Green,
+                        startAngle = 90f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Blue,
+                        startAngle = 180f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Yellow,
+                        startAngle = 270f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                }
+
+                // Define clickable areas for each quadrant
+                val quadrantSize = 200.dp / 2
+
+                // rojo
+                Box(
+                    modifier = Modifier
+                        .size(quadrantSize)
+                        .align(Alignment.TopStart)
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                Log.d(TAG_LOG, "Dentro del onClick")
+                                miViewModel.compararRandom(0)
+                            })
+                        }
                 )
-                drawArc(
-                    color = Color.Green,
-                    startAngle = 90f,
-                    sweepAngle = 90f,
-                    useCenter = true,
-                    size = Size(canvasWidth, canvasHeight),
-                    style = Fill
+
+                // verde
+                Box(
+                    modifier = Modifier
+                        .size(quadrantSize)
+                        .align(Alignment.TopEnd)
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                miViewModel.compararRandom(1)
+                            })
+                        }
                 )
-                drawArc(
-                    color = Color.Blue,
-                    startAngle = 180f,
-                    sweepAngle = 90f,
-                    useCenter = true,
-                    size = Size(canvasWidth, canvasHeight),
-                    style = Fill
+
+                // azul
+                Box(
+                    modifier = Modifier
+                        .size(quadrantSize)
+                        .align(Alignment.BottomStart)
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                miViewModel.compararRandom(2)
+                            })
+                        }
                 )
-                drawArc(
-                    color = Color.Yellow,
-                    startAngle = 270f,
-                    sweepAngle = 90f,
-                    useCenter = true,
-                    size = Size(canvasWidth, canvasHeight),
-                    style = Fill
+
+                // amarillo
+                Box(
+                    modifier = Modifier
+                        .size(quadrantSize)
+                        .align(Alignment.BottomEnd)
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                miViewModel.compararRandom(3)
+                            })
+                        }
                 )
             }
+        } else {
+            // Using a Box to layer clickable areas over the arcs
+            Box(modifier = Modifier.size(200.dp)) {
+                // Draw each quadrant with a different color
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
 
-            // Define clickable areas for each quadrant
-            val quadrantSize = 200.dp / 2
-
-            // rojo
-            Box(
-                modifier = Modifier
-                    .size(quadrantSize)
-                    .align(Alignment.TopStart)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            Log.d(TAG_LOG, "Dentro del onClick")
-                            miViewModel.compararRandom(0)
-                        })
-                    }
-            )
-
-            // verde
-            Box(
-                modifier = Modifier
-                    .size(quadrantSize)
-                    .align(Alignment.TopEnd)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            miViewModel.compararRandom(1)
-                        })
-                    }
-            )
-
-            // azul
-            Box(
-                modifier = Modifier
-                    .size(quadrantSize)
-                    .align(Alignment.BottomStart)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            miViewModel.compararRandom(2)
-                        })
-                    }
-            )
-
-            // amarillo
-            Box(
-                modifier = Modifier
-                    .size(quadrantSize)
-                    .align(Alignment.BottomEnd)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            miViewModel.compararRandom(3)
-                        })
-                    }
-            )
+                    drawArc(
+                        color = Color.Red.copy(alpha = 0.3f),  // Red with reduced opacity to make it paler
+                        startAngle = 0f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Green.copy(alpha = 0.3f),  // Green with reduced opacity to make it paler
+                        startAngle = 90f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Blue.copy(alpha = 0.3f),  // Blue with reduced opacity to make it paler
+                        startAngle = 180f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                    drawArc(
+                        color = Color.Yellow.copy(alpha = 0.3f),  // Yellow with reduced opacity to make it paler
+                        startAngle = 270f,
+                        sweepAngle = 90f,
+                        useCenter = true,
+                        size = Size(canvasWidth, canvasHeight),
+                        style = Fill
+                    )
+                }
+            }
         }
     }
 }
